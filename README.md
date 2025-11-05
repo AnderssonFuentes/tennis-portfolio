@@ -1,4 +1,4 @@
-cat > README.md <<'EOF'
+
 # 🎾 Tennis Portfolio — Simulación de un Partido de Tenis (UML + Java)
 
 > **Proyecto educativo-profesional** orientado a demostrar dominio en **Análisis y Diseño Orientado a Objetos (OOAD)** siguiendo el enfoque metodológico de **Grady Booch**.  
