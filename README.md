@@ -1,33 +1,96 @@
-# 🎾 Tennis Portfolio — Simulación de Partido de Tenis (UML + Java) ![Java](https://img.shields.io/badge/Java-17-blue) ![Maven](https://img.shields.io/badge/Maven-3.8-green)
-## 📘 Descripción General
+# 🎮 Sistema de Partido de Tenis – Fase 2: Modelo del Juego (Game)
 
-Este proyecto es una **simulación progresiva de un partido de tenis**, desarrollada en **Java** siguiendo principios de **Programación Orientada a Objetos (POO)** y utilizando **diagramas UML** para modelar su dominio.  
-Su objetivo es demostrar una comprensión sólida de conceptos de **encapsulación, herencia, composición y principios SOLID**, con un enfoque evolutivo por fases.
+> **Autor:** Andersson Fuentes  
+> **Proyecto de Portafolio:** Sistema de Partido de Tenis  
+> **Enfoque:** Análisis y Diseño Orientado a Objetos con Aplicaciones – *Grady Booch*  
+> **Tecnologías:** Java 21 · UML (PlantUML) · IntelliJ IDEA · Git & GitHub
 
 ---
 
-## 🧩 Fase 1 — Modelo de Dominio
+## 🧭 Contexto del Dominio
 
-### 🎯 Objetivo
-Modelar las entidades principales de un partido de tenis, representando jugadores, equipos y estadísticas básicas.
+En esta segunda fase, el proyecto evoluciona desde el **modelo del dominio** (Fase 1) hacia la **modelación del comportamiento del juego**.  
+Siguiendo el enfoque de *Grady Booch*, esta etapa se centra en **dar vida al modelo**, representando las **reglas y dinámicas** que rigen un *Game* dentro de un partido de tenis.
 
-### 🏗️ Clases implementadas
+> *“El dominio define las piezas; el comportamiento les da propósito.”*
 
+---
+
+## 🎾 Objetivo de la Fase 2
+
+Modelar la estructura y el flujo de un **juego de tenis individual (Game)**, donde dos jugadores compiten aplicando reglas clásicas, como la secuencia de puntos *(Love, 15, 30, 40, Deuce, Advantage, Game)*.
+
+Esta fase busca **desacoplar la lógica del juego de sus reglas**, aplicando principios de diseño orientado a objetos.
+
+---
+
+## 🧩 Estructura del Modelo
+
+### **Clases principales**
 | Clase | Descripción |
-|-------|--------------|
-| **Participante** | Clase base abstracta que define los atributos y comportamientos comunes de cualquier participante del partido. |
-| **Jugador** | Representa a un jugador individual. Hereda de `Participante` y contiene su propio `RegistroEstadisticas`. |
-| **Equipo** | Agrupa jugadores para modalidades dobles o mixtas. Implementa composición de `Jugador`. |
-| **RegistroEstadisticas** | Registra estadísticas básicas como aces, errores no forzados y primeros saques acertados. |
+|:--|:--|
+| `Game` | Representa una unidad de juego entre dos jugadores. Coordina la puntuación y determina el ganador del game. |
+| `IReglasGame` | Interfaz que define el contrato de las reglas del juego. |
+| `ReglasClasicasGame` | Implementación concreta de las reglas tradicionales del tenis. |
+| `MainGameDemo` | Clase de demostración que ejecuta y valida el flujo del juego. |
 
 ---
 
-## 🧠 Diagrama UML (Fase 1)
+## ⚙️ Conceptos de Diseño Aplicados
+
+- **Abstracción y Polimorfismo:** separación entre la lógica del juego y la implementación de reglas.
+- **Interfaces (IReglasGame):** contrato que favorece la extensibilidad (permite futuras variantes de reglas).
+- **Bajo acoplamiento y alta cohesión:** cada clase cumple una responsabilidad clara.
+- **Patrón de Diseño:** *Strategy Pattern* (incipiente), para intercambiar reglas dinámicamente.
+- **Principio de Sustitución de Liskov (L en SOLID):** las implementaciones de reglas pueden sustituirse sin alterar el funcionamiento del `Game`.
 
 ---
 
-![Fase 1 - Modelo de Dominio (Tenis)](https://uml.planttext.com/plantuml/svg/TLBBJiD03BplLrWvfLHxA4TKLKLgE5I0AieFk8aLBKhMgNV31VXtDa-QaXvtPkmPswkspgFukYoKDxuWU497i08DBvnHmP0HxBWqrZ34xsIDMoY59-S5KmzfWSx18JGmgQdGUe8l1Q7OSdaIWWSuUZ4s3zWISlAlBHmlfeGRYQkoHlV99bC_IdLM-ph7ZALteP0zCowOemlIDyh3GpYvW0VdIwprdnMFFicvDXNV74R3HnU46j_dKBxkasq6m_qWQDrc9V-tCVhFfUlJODgQ6kkx7OZqCGQa4bEIi3lYkIRtc9A47lodM89qtL426OzBdZ19q_O6TsWDslOnzks3yCHS4Df9ZUTkigiX9pzc_QtrS5ZLBpvQHN0NuEW-6gdXzbflvg-djcIpvYV_0W00)
+## 📈 Diagrama UML – Fase 2
+> *(Este diagrama muestra las relaciones entre `Game`, `IReglasGame`, y `ReglasClasicasGame`.)*  
+> 📄 Generado con **PlantUML**
+
+![Diagrama UML](https://uml.planttext.com/plantuml/png/pPBBQiCm44M_OFvXbWc90_6wX43JX1GCfLsMBYRsH5NGmqXoeQz_h-Gu8NRQVHSoykZewWpIqWToeT4A8CYW6Ezq7Tvn9KauqfZXcZpd04isLQIMP_n8frNC8rROYfN5-C7xXeN5qOOqZm6a2UpsL39k7raeygcEdp1vix92tsXo3uq9TlGKd3G23usWohenJBg2tGKst49qu6jiPwrYClXAQsb8oOzO7rrjtv19V5pu1YYZXiUZpcqSikoqfAuLQpR13sopWkgRO-8Kjx4bmMw1THBt_w2La-Mbj6kdaFLFcGyBEKmIVfQPJ_4qpQTu7JZksatR_sgt1RJrmP4ho9L3tOAaIP4hrZOz1Ht_kvJd5oGdV0ktfsRPuj82VhcrsUohp_JoKq1RxPxm3m00)
+---
 
 ---
 
+## 🧠 Aprendizaje
+
+Durante esta fase comprendí que **el comportamiento del sistema es lo que transforma un modelo estático en un modelo vivo**.  
+Al diseñar interfaces y reglas desacopladas, el código deja de ser rígido y comienza a adaptarse a posibles variaciones del dominio.
+
+> “En el diseño orientado a objetos, pensar en cómo se comportan los objetos  
+> es tan importante como definir quiénes son.”
+
+---
+
+## 🚀 Próximo Paso – Fase 3
+
+Modelar la **estructura del Set y TieBreak**, aplicando:
+- Composición entre *Game* y *Set*
+- Manejo de resultados y estadísticas acumuladas
+- Aplicación de principios de *Composite Pattern*
+- Extensión del modelo UML a nivel de torneo
+
+---
+
+## 🧰 Tecnologías y Herramientas
+
+- Java 21
+- UML (PlantUML)
+- IntelliJ IDEA
+- Git & GitHub
+
+---
+
+## 📎 Recursos y Referencias
+
+- *Grady Booch*, **Análisis y Diseño Orientado a Objetos con Aplicaciones**
+- [PlantUML Documentation](https://plantuml.com/)
+- [Repositorio del Proyecto](https://github.com/AnderssonFuentes/tennis-portfolio)
+
+---
+
+© 2025 Andersson Fuentes · Proyecto educativo y de portafolio profesional.
 
