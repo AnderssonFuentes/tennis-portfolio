@@ -17,4 +17,14 @@ public class RegistroEstadisticas {
     public String toString() {
         return "Aces=" + aces + ", Errores=" + errores + ", PrimerosSaqueAcertados=" + primerosSaques;
     }
+
+    public void registrar(TipoEstadistica tipo) {
+        switch (tipo) {
+            case ACE -> registrarAce();
+            case ERROR -> registrarError();
+            case PRIMER_SAQUE_OK -> registrarPrimerSaque(true);
+            case PRIMER_SAQUE_FALLADO -> registrarPrimerSaque(false);
+        }
+    }
+
 }
