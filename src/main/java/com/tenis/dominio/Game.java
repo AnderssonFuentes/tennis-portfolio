@@ -32,6 +32,16 @@ public class Game {
         puntos.compute(ganador, (k, v) -> v + 1);
     }
 
+    public void registrarPunto(Participante p, TipoEstadistica evento) {
+        // 1) registrar el punto normal (reutilizamos tu lógica existente)
+        registrarPunto(p);
+
+        // 2) registrar evento si aplica (simple)
+        if (evento != null && p instanceof Jugador jugador) {
+            jugador.getEstadisticas().registrar(evento);
+        }
+    }
+
     /**
      * Devuelve un mapa inmutable con los puntos (protege encapsulamiento).
      */
