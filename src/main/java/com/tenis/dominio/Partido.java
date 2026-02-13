@@ -10,12 +10,16 @@ public class Partido {
     private final Participante participante2;
     private final List<Set> sets;
 
-    public Partido(Participante participante1, Participante participante2) {
-        if (participante1 == null || participante2 == null) {
-            throw new IllegalArgumentException("Los participantes no pueden ser nulos");
-        }
-        this.participante1 = participante1;
-        this.participante2 = participante2;
+    private final int setsParaGanar;
+
+    public Partido(Participante p1, Participante p2) {
+        this(p1, p2, 2); // Best of 3
+    }
+
+    public Partido(Participante p1, Participante p2, int setsParaGanar) {
+        this.participante1 = p1;
+        this.participante2 = p2;
+        this.setsParaGanar = setsParaGanar;
         this.sets = new ArrayList<>();
     }
 
@@ -28,16 +32,33 @@ public class Partido {
         sets.add(set);
     }
 
-    public boolean hayGanador() {
+    public int setsGanadosPor(Participante p) {
+        int ganados = 0;
+
         for (Set s : sets) {
-            if (s.hayGanador()) return true;
+            if (s.hayGanador()) {
+                Participante ganador = s.getGanador();
+                if (ganador != null && ganador.equals(p)) {
+                    ganados++;
+                }
+            }
         }
-        return false;
+
+        return ganados;
     }
 
+    public boolean hayGanador() {
+        return setsGanadosPor(participante1) >= setsParaGanar
+                || setsGanadosPor(participante2) >= setsParaGanar;
+    }
+
+
     public Participante getGanador() {
-        for (Set s : sets) {
-            if (s.hayGanador()) return s.getGanador();
+        if (setsGanadosPor(participante1) >= setsParaGanar) {
+            return participante1;
+        }
+        if (setsGanadosPor(participante2) >= setsParaGanar) {
+            return participante2;
         }
         return null;
     }

@@ -1,0 +1,124 @@
+# Phase 05B — Partido (Best-of-3) · Micro-avance #1
+
+**Estado:** Implementado
+**Rama:** `phase/05b-best-of-3`
+**Enfoque:** Programación Orientada a Objetos básica · UML · KISS · Evolución incremental
+**Referencia conceptual:** Grady Booch — *Análisis y Diseño Orientado a Objetos con Aplicaciones*
+
+---
+
+## 🎯 Objetivo de esta fase
+
+Evolucionar la clase `Partido` para que represente correctamente la regla real del tenis:
+
+> Un partido se gana cuando un participante alcanza la cantidad necesaria de sets ganados.
+
+Por defecto:
+- **Best-of-3 → 2 sets para ganar**
+
+En la fase anterior (05A), `Partido` actuaba como orquestador básico.
+En esta fase (05B), `Partido` incorpora la lógica macro del dominio.
+
+---
+
+## 🧩 Diferencia clara entre Phase 05A y Phase 05B
+
+### Phase 05A — Orquestación mínima
+- `Partido` contiene participantes y sets.
+- Delegación básica hacia `Set`.
+- No existe lógica real de “cuántos sets hacen falta”.
+
+### Phase 05B — Best-of-3
+- Se introduce `setsParaGanar`.
+- Se implementa conteo real de sets ganados.
+- `Partido` decide el ganador solo cuando se alcanzan los sets necesarios.
+
+Resultado:
+El modelo ahora representa correctamente cómo funciona el tenis real.
+
+---
+
+## 🧠 Filosofía de micro-avances
+
+Este proyecto se construye de forma incremental:
+
+- Cambios pequeños
+- Commits claros
+- Evolución rastreable
+- Publicación constante
+- Comprensión profunda antes de complejidad
+
+Cada micro-avance refuerza un concepto puntual de POO y UML.
+
+---
+
+## 🔧 Cambios implementados en esta fase
+
+### 1️⃣ Nuevo atributo en `Partido`
+
+```java
+private final int setsParaGanar;
+```
+
+### 2️⃣ Nuevo método: setsGanadosPor(Participante p)
+
+Responsabilidad:
+
+- Recorrer la lista de Set
+- Consultar cada Set
+- Contar cuántos sets ganó el participante
+- Aquí ocurre la colaboración real entre objetos: `Partido` → consulta → `Set`
+
+### 3️⃣ Actualización de hayGanador()
+```java
+return setsGanadosPor(p1) >= setsParaGanar
+    || setsGanadosPor(p2) >= setsParaGanar;
+```
+### 4️⃣ Actualización de getGanador()
+
+Devuelve al participante que alcanzó `setsParaGanar`.
+
+---
+
+### 🤝 Comunicación entre objetos
+
+Cuando se ejecuta:
+```java
+partido.hayGanador();
+```
+Ocurre lo siguiente:
+
+1. `Partido` llama internamente a `setsGanadosPor(p1)`
+2. Por cada `Set`:
+   - envía mensaje `hayGanador()`
+   - si es verdadero, envía `getGanador()`
+3. Cuenta resultados
+4. Evalúa si alguien alcanzó `setsParaGanar`
+
+Importante:
+- Partido no inspecciona games.
+- No accede a tie-break.
+- No calcula puntos.
+- Solo pregunta al objeto responsable.
+- Esto es delegación correcta.
+
+---
+### 📐 UML — Phase 05B
+![Phase 05B — Partido Best-of-3](https://uml.planttext.com/plantuml/svg/dP91JiCm44NtFiMegnJgge3OHAYgkc7JHIHEC4s6r5AmBS-0L5MLE0Gdv2JO2O7MwWQsVd_-__hoYWM3lBvqIenq1DKEcM1nluRFzm-e8ZEDWpMnQFUixvJ2BKl0Mg3ka7bGrCQZ5L9gU7iYWOC2k8OTxX_HOkD2CIrXwrn7Q7lIafoGCvVZw3Ec9oyD_aHpavta_FO2Pn8kOMDO7cB1vSzR56Ag4aemLlfoty65pt9cu3FdwH_rimkHWmUsWLeCiLeH9MKQCGxpvapJutGs3CPLtCndDNwx_tVoSMojb-Ti12wHoM8-lvgaScf5jad_vWi0)
+
+---
+### 🏗 Principios aplicados (básicos)
+- Composición sobre herencia
+- Delegación de responsabilidades
+- Comunicación por mensajes
+- Encapsulamiento
+- Modelo fiel al dominio
+- KISS (sin sobre-ingeniería)
+
+---
+
+### 📦 Archivos involucrados
+`src/main/java/com/tenis/dominio/Partido.java`
+
+`README_PHASE_05B.md`
+
