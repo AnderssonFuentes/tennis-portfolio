@@ -29,6 +29,11 @@ public class Partido {
 
     public void agregarSet(Set set) {
         if (set == null) throw new IllegalArgumentException("Set no puede ser nulo");
+
+        if (hayGanador()) {
+            throw new IllegalStateException("El partido ya terminó: no se pueden agregar más sets");
+        }
+
         sets.add(set);
     }
 

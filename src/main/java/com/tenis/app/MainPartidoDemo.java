@@ -33,7 +33,7 @@ public class MainPartidoDemo {
             set.agregarGame(g1);
 
             Game g2 = new Game(rafa, roger, reglasGame);
-            while (!g2.hayGanador()) g2.registrarPunto(roger);
+            while (!g2.hayGanador()) g2.registrarPunto(rafa);
             set.agregarGame(g2);
         }
 
@@ -49,7 +49,19 @@ public class MainPartidoDemo {
             for (int i = 0; i < 5; i++) set.registrarPuntoTieBreak(roger);
         }
 
+        Set set2 = new Set(reglasSet, rafa, roger);
+
+        for (int i = 0; i < 6; i++) {
+            Game g = new Game(rafa, roger, reglasGame);
+            while (!g.hayGanador()) g.registrarPunto(rafa);
+            set2.agregarGame(g);
+        }
+
+        System.out.println("Set tiene ganador?: " + set.hayGanador());
+        System.out.println("Ganador set: " + (set.getGanador() != null ? set.getGanador().getNombre() : "N/A"));
+
         partido.agregarSet(set);
+        partido.agregarSet(set2);
 
         System.out.println("¿Hay ganador del set?: " + set.hayGanador());
         if (set.hayGanador()) {
@@ -61,5 +73,20 @@ public class MainPartidoDemo {
         if (partido.hayGanador()) {
             System.out.println("Ganador del partido: " + partido.getGanador().getNombre());
         }
+
+        try {
+            Set setExtra = new Set(reglasSet, rafa, roger);
+
+            for (int i = 0; i < 6; i++) {
+                Game game = new Game(rafa, roger, reglasGame);
+                while (!game.hayGanador()) game.registrarPunto(rafa);
+                setExtra.agregarGame(game);
+            }
+
+            partido.agregarSet(setExtra); // debería fallar
+        } catch (IllegalStateException e) {
+            System.out.println("Bloqueo correcto: " + e.getMessage());
+        }
+
     }
 }

@@ -122,3 +122,11 @@ Importante:
 
 `README_PHASE_05B.md`
 
+---
+
+## ✅ Micro-avance #3 — Integridad del dominio (bloqueo post-finalización)
+
+Se reforzó la clase `Partido` para evitar estados inválidos:
+- Si `Partido` ya tiene ganador (Best-of-3), no se permite agregar más `Set`.
+
+Esto asegura consistencia del modelo y mantiene al dominio protegido frente a usos incorrectos desde demos o futuras capas (UI/API).
