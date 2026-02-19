@@ -1,16 +1,9 @@
 package com.tenis.app;
 
-import com.tenis.dominio.Game;
-import com.tenis.dominio.Jugador;
-import com.tenis.dominio.Participante;
-import com.tenis.dominio.Set;
-import com.tenis.dominio.Partido;
-import com.tenis.reglas.IReglasGame;
-import com.tenis.reglas.IReglasSet;
-import com.tenis.reglas.IReglasTieBreak;
-import com.tenis.reglas.ReglasClasicasGame;
-import com.tenis.reglas.ReglasClasicasSet;
-import com.tenis.reglas.ReglasClasicasTieBreak;
+import com.tenis.dominio.*;
+import com.tenis.marcador.IMarcador;
+import com.tenis.marcador.MarcadorClasico;
+import com.tenis.reglas.*;
 
 public class MainPartidoDemo {
 
@@ -24,6 +17,12 @@ public class MainPartidoDemo {
         IReglasTieBreak reglasTieBreak = new ReglasClasicasTieBreak();
 
         Partido partido = new Partido(rafa, roger);
+        IMarcador marcador = new MarcadorClasico();
+        partido.setMarcador(marcador);
+        marcador.iniciarMarcador();
+
+        marcador.mostrarEstado(partido);
+
 
         Set set = new Set(reglasSet, rafa, roger);
 
@@ -62,6 +61,8 @@ public class MainPartidoDemo {
 
         partido.agregarSet(set);
         partido.agregarSet(set2);
+
+        marcador.mostrarEstado(partido);
 
         System.out.println("¿Hay ganador del set?: " + set.hayGanador());
         if (set.hayGanador()) {

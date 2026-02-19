@@ -1,0 +1,94 @@
+# Phase 06A — Marcador (KISS) · Micro-avance #1
+
+**Estado:** Implementado  
+**Rama:** `phase/06a-marcador`  
+**Enfoque:** POO básica + UML + KISS (sin patrones avanzados)  
+**Referencia conceptual:** Grady Booch — *Análisis y Diseño Orientado a Objetos con Aplicaciones*
+
+---
+
+## 🎯 Objetivo de esta fase
+
+Agregar un **Marcador** simple al sistema (scoreboard por consola) que permita **visualizar el estado del partido** sin alterar la lógica del dominio.
+
+Este micro-avance introduce la capa mínima de “presentación” (en consola), manteniendo la separación de responsabilidades:
+
+- El **dominio** decide (Partido / Set / Game / TieBreak).
+- El **marcador** muestra (consulta y presenta información).
+
+---
+
+## 🧭 ¿Qué se implementó en el micro-avance #1?
+
+### ✅ Nuevos elementos
+
+- `IMarcador` (interfaz): contrato mínimo para iniciar el marcador y mostrar el estado.
+- `MarcadorClasico` (implementación): salida por consola, simple y KISS.
+
+### ✅ Integración mínima
+
+- `Partido` puede asociar un marcador (`setMarcador/getMarcador`) sin depender de una implementación concreta.
+- `MainPartidoDemo` invoca al marcador en momentos clave para imprimir el estado del partido.
+
+---
+
+## 🧩 Responsabilidades (POO real)
+
+### `Partido` (dominio)
+- Orquesta el partido.
+- Conoce la regla de Best-of-3 (`setsParaGanar`).
+- Determina si hay ganador y quién es el ganador.
+- Protege invariantes (por ejemplo: no aceptar más sets cuando ya terminó).
+
+### `IMarcador` / `MarcadorClasico` (presentación por consola)
+- **No modifica** el dominio.
+- Solo pregunta y muestra:
+    - sets jugados
+    - si hay ganador del partido
+    - ganador si existe
+
+Esto mantiene bajo acoplamiento: el `Partido` depende de la abstracción (`IMarcador`), no del marcador concreto.
+
+---
+
+## 🔄 Comunicación entre objetos (flujo de mensajes)
+
+Cuando se ejecuta:
+
+```java
+marcador.mostrarEstado(partido);
+
+```
+
+#### ocurre lo siguiente:
+
+- MarcadorClasico recibe el objeto Partido.
+
+- Consulta (solo lectura):
+
+- partido.getSets().size()
+
+- partido.hayGanador()
+
+- partido.getGanador() (si aplica)
+
+- Imprime el estado por consola.
+
+📌 Importante:
+El marcador no calcula el ganador, solo lo consulta.
+
+---
+## 📐 UML (Phase 06A · Micro #1)
+![Phase 06A — Marcador (KISS)](https://uml.planttext.com/plantuml/svg/hPB1IWCn48RlUOevxbAsUF8GIgb8aQ92OPzWJA8To6QM91L41H_29_H9pCPc6thsbim_Czy_cMn2H1-FWnMHeZMmFs0mS7Lz0pzVt_28Ng5c3ytzhkzR8SX5uvzH6TZDshi0M00vKeI-H9jMmYkJpjh08NhqsyJIt8m9I9ebxFyE9VDJ26KnX9bwcswa-Fy1ftXkt44mCKXue11NlOdh71jE57cUCuDIxcnWgCJQp4kLqrusI6A2X4ceYGiuuDiTkbBqn6mDkb9IATcxeX7J9gQ9pdjOVIoNbsydogXTjwvM9k4O41eU5R53sugDSNhw1By0)
+
+---
+
+## ✅ Qué se aprendió en este micro-avance
+
+- Separación básica de responsabilidades (dominio vs presentación).
+
+- Bajo acoplamiento usando una interfaz (IMarcador).
+
+- Comunicación entre objetos por mensajes (consultas, no inspección interna).
+
+- Evolución incremental del modelo UML hacia un sistema más completo.
