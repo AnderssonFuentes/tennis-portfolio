@@ -92,3 +92,15 @@ El marcador no calcula el ganador, solo lo consulta.
 - Comunicación entre objetos por mensajes (consultas, no inspección interna).
 
 - Evolución incremental del modelo UML hacia un sistema más completo.
+
+---
+
+## ✅ Micro-avance #2 — Score por sets en el marcador
+
+Se enriqueció `MarcadorClasico` para mostrar el estado “macro” del partido:
+
+- sets jugados
+- sets ganados por cada participante
+- ganador del partido (si aplica)
+
+El marcador sigue siendo **solo lectura**: consulta a `Partido` y presenta información sin modificar el dominio.

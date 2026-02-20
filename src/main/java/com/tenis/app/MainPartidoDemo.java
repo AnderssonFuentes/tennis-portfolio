@@ -60,7 +60,10 @@ public class MainPartidoDemo {
         System.out.println("Ganador set: " + (set.getGanador() != null ? set.getGanador().getNombre() : "N/A"));
 
         partido.agregarSet(set);
+        marcador.mostrarEstado(partido);
+
         partido.agregarSet(set2);
+        marcador.mostrarEstado(partido);
 
         marcador.mostrarEstado(partido);
 

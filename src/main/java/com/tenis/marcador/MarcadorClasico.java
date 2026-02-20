@@ -1,6 +1,5 @@
 package com.tenis.marcador;
 
-import com.tenis.dominio.Participante;
 import com.tenis.dominio.Partido;
 
 public class MarcadorClasico implements IMarcador {
@@ -18,12 +17,21 @@ public class MarcadorClasico implements IMarcador {
         }
 
         int setsJugados = partido.getSets().size();
-        System.out.println("\n--- Estado del Partido ---");
-        System.out.println("Sets jugados: " + setsJugados);
-        System.out.println("¿Hay ganador del partido?: " + partido.hayGanador());
+        var p1 = partido.getParticipante1();
+        var p2 = partido.getParticipante2();
 
-        if (partido.hayGanador()) {
-            Participante g = partido.getGanador();
+        int setsP1 = partido.setsGanadosPor(p1);
+        int setsP2 = partido.setsGanadosPor(p2);
+
+        System.out.println("\n--- Marcador (Clásico) ---");
+        System.out.println("Sets jugados: " + setsJugados);
+        System.out.println("Sets ganados: " + p1.getNombre() + " " + setsP1 + " - " + setsP2 + " " + p2.getNombre());
+
+        boolean hayGanador = partido.hayGanador();
+        System.out.println("¿Hay ganador del partido?: " + hayGanador);
+
+        if (hayGanador) {
+            var g = partido.getGanador();
             System.out.println("Ganador del partido: " + (g != null ? g.getNombre() : "N/A"));
         }
     }
