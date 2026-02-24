@@ -104,3 +104,55 @@ Se enriqueció `MarcadorClasico` para mostrar el estado “macro” del partido:
 - ganador del partido (si aplica)
 
 El marcador sigue siendo **solo lectura**: consulta a `Partido` y presenta información sin modificar el dominio.
+
+---
+
+---
+
+## ✅ Micro-avance #3 — Estado del set actual + TieBreak (solo lectura)
+
+En este micro-avance se extendió `MarcadorClasico` para mostrar información del **momento actual** del partido, además del score macro por sets.
+
+### 📌 ¿Qué se muestra ahora?
+
+- **Set actual** (último set agregado al partido)
+- **Games jugados** en el set actual
+- **TieBreak activo** (sí/no)
+- Si hay tie-break: **puntos del tie-break** por cada participante
+
+### 🔄 Comunicación entre objetos (flujo de mensajes)
+
+Cuando se ejecuta:
+
+```java
+marcador.mostrarEstado(partido);
+```
+
+ocurre lo siguiente:
+
+1. MarcadorClasico consulta al Partido (solo lectura):
+
+- partido.getSets()
+- partido.getParticipante1() / partido.getParticipante2()
+
+2. Identifica el set actual:
+
+ - setActual = sets.get(sets.size() - 1)
+
+3. Consulta al Set:
+
+- setActual.getGames().size()
+
+- setActual.getTieBreak()
+
+4. Si existe tie-break, consulta al TieBreak:
+
+- tb.puntosDe(p1)
+
+- tb.puntosDe(p2)
+
+📌 Importante: el marcador no modifica el dominio. Solo consulta y muestra información.
+
+✅ Con esto, el marcador ofrece contexto del set actual manteniendo el enfoque KISS y separación de responsabilidades.
+
+---
