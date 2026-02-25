@@ -156,3 +156,14 @@ ocurre lo siguiente:
 ✅ Con esto, el marcador ofrece contexto del set actual manteniendo el enfoque KISS y separación de responsabilidades.
 
 ---
+---
+
+## ✅ Micro-avance #4 — Score del set actual por games ganados
+
+Se extendió `MarcadorClasico` para mostrar el **score del set actual** contado por games ganados:
+
+- Se recorren los `Game` del set actual (`setActual.getGames()`).
+- Solo se cuentan games terminados (`game.hayGanador()`).
+- Se obtiene el ganador de cada game (`game.getGanador()`) y se acumula el conteo por participante.
+
+El marcador sigue siendo **solo lectura**: consulta a `Partido → Set → Game` y presenta información sin modificar el dominio.

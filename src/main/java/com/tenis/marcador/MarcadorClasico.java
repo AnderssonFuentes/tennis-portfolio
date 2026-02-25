@@ -1,9 +1,6 @@
 package com.tenis.marcador;
 
-import com.tenis.dominio.Participante;
-import com.tenis.dominio.Partido;
-import com.tenis.dominio.Set;
-import com.tenis.dominio.TieBreak;
+import com.tenis.dominio.*;
 
 import java.util.List;
 
@@ -52,7 +49,28 @@ public class MarcadorClasico implements IMarcador {
         Set setActual = sets.get(sets.size() - 1);
         System.out.println("Games jugados en este set: " + setActual.getGames().size());
 
+        int gamesP1 = 0;
+        int gamesP2 = 0;
+
+        for (Game g : setActual.getGames()) {
+            if (g.hayGanador()) {
+                Participante ganadorGame = g.getGanador();
+
+                if (ganadorGame != null && ganadorGame.equals(p1)) {
+                    gamesP1++;
+                } else if (ganadorGame != null && ganadorGame.equals(p2)) {
+                    gamesP2++;
+                }
+            }
+        }
+
+        System.out.println("Games ganados en este set: "
+                + p1.getNombre() + " " + gamesP1
+                + " - "
+                + gamesP2 + " " + p2.getNombre());
+
         TieBreak tb = setActual.getTieBreak();
+
         if (tb != null) {
             System.out.println("TieBreak activo: SI");
             int tbP1 = tb.puntosDe(p1);

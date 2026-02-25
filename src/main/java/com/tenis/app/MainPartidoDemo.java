@@ -30,10 +30,6 @@ public class MainPartidoDemo {
             Game g1 = new Game(rafa, roger, reglasGame);
             while (!g1.hayGanador()) g1.registrarPunto(rafa);
             set.agregarGame(g1);
-
-            Game g2 = new Game(rafa, roger, reglasGame);
-            while (!g2.hayGanador()) g2.registrarPunto(rafa);
-            set.agregarGame(g2);
         }
 
         System.out.println("Games jugados: " + set.getGames().size());
