@@ -69,6 +69,23 @@ public class MarcadorClasico implements IMarcador {
                 + " - "
                 + gamesP2 + " " + p2.getNombre());
 
+        // --- Micro #5: Game score (solo lectura, KISS) ---
+        if (!setActual.getGames().isEmpty()) {
+            Game gameActual = setActual.getGames().get(setActual.getGames().size() - 1);
+
+            if (gameActual.hayGanador()) {
+                Participante ganador = gameActual.getGanador();
+                System.out.println("Game actual: TERMINADO (ganó " + ganador.getNombre() + ")");
+            } else {
+                String p1Score = gameActual.puntajePara(p1);
+                String p2Score = gameActual.puntajePara(p2);
+
+                System.out.println("Game actual: " + p1Score + " - " + p2Score);
+            }
+        } else {
+            System.out.println("Game actual: Aún no hay games en el set actual.");
+        }
+
         TieBreak tb = setActual.getTieBreak();
 
         if (tb != null) {

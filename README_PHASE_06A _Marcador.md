@@ -167,3 +167,20 @@ Se extendió `MarcadorClasico` para mostrar el **score del set actual** contado 
 - Se obtiene el ganador de cada game (`game.getGanador()`) y se acumula el conteo por participante.
 
 El marcador sigue siendo **solo lectura**: consulta a `Partido → Set → Game` y presenta información sin modificar el dominio.
+
+---
+✅ Micro-avance #5 — Game score del game actual (solo lectura)
+
+- Se extendió `MarcadorClasico` para mostrar el puntaje del game actual en el set actual:
+
+- Se obtiene el set actual (`Partido → Set`).
+
+- Se toma el game actual como el último game agregado (`setActual.getGames()`).
+
+- Si el game ya terminó, se muestra el ganador.
+
+- Si el game está en curso, el marcador consulta el puntaje con `gameActual.puntajePara(p)` y lo presenta (ej:`15 - 30`).
+
+El marcador se mantiene como solo lectura: no modifica reglas ni estado del dominio.
+
+---

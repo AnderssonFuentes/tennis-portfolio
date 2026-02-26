@@ -55,6 +55,12 @@ public class MainPartidoDemo {
         System.out.println("Set tiene ganador?: " + set.hayGanador());
         System.out.println("Ganador set: " + (set.getGanador() != null ? set.getGanador().getNombre() : "N/A"));
 
+        Game gameEnCurso = new Game(rafa, roger, reglasGame);
+        gameEnCurso.registrarPunto(rafa);   // 15-0
+        gameEnCurso.registrarPunto(roger);  // 15-15
+        gameEnCurso.registrarPunto(roger);  // 15-30
+        set2.agregarGame(gameEnCurso);
+
         partido.agregarSet(set);
         marcador.mostrarEstado(partido);
 
