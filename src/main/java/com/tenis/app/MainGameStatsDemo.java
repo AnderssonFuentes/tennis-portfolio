@@ -18,7 +18,7 @@ public class MainGameStatsDemo {
         IReglasGame reglasGame = new ReglasClasicasGame();
 
         // 3) Creamos un game
-        Game game = new Game(rafa, roger, reglasGame);
+        Game game = new Game(rafa, roger, roger, reglasGame);
 
         // 4) Simulamos algunos puntos con eventos estadísticos (manuales, KISS)
         game.registrarPunto(rafa, TipoEstadistica.ACE);

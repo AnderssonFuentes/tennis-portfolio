@@ -27,7 +27,7 @@ public class MainPartidoDemo {
         Set set = new Set(reglasSet, rafa, roger);
 
         for (int i = 0; i < 6; i++) {
-            Game g1 = new Game(rafa, roger, reglasGame);
+            Game g1 = new Game(rafa, roger, roger,reglasGame);
             while (!g1.hayGanador()) g1.registrarPunto(rafa);
             set.agregarGame(g1);
         }
@@ -47,7 +47,7 @@ public class MainPartidoDemo {
         Set set2 = new Set(reglasSet, rafa, roger);
 
         for (int i = 0; i < 6; i++) {
-            Game g = new Game(rafa, roger, reglasGame);
+            Game g = new Game(rafa, roger, roger, reglasGame);
             while (!g.hayGanador()) g.registrarPunto(rafa);
             set2.agregarGame(g);
         }
@@ -55,7 +55,7 @@ public class MainPartidoDemo {
         System.out.println("Set tiene ganador?: " + set.hayGanador());
         System.out.println("Ganador set: " + (set.getGanador() != null ? set.getGanador().getNombre() : "N/A"));
 
-        Game gameEnCurso = new Game(rafa, roger, reglasGame);
+        Game gameEnCurso = new Game(rafa, roger, roger, reglasGame);
         gameEnCurso.registrarPunto(rafa);   // 15-0
         gameEnCurso.registrarPunto(roger);  // 15-15
         gameEnCurso.registrarPunto(roger);  // 15-30
@@ -84,7 +84,7 @@ public class MainPartidoDemo {
             Set setExtra = new Set(reglasSet, rafa, roger);
 
             for (int i = 0; i < 6; i++) {
-                Game game = new Game(rafa, roger, reglasGame);
+                Game game = new Game(rafa, roger, roger,reglasGame);
                 while (!game.hayGanador()) game.registrarPunto(rafa);
                 setExtra.agregarGame(game);
             }

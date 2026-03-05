@@ -72,6 +72,7 @@ public class MarcadorClasico implements IMarcador {
         // --- Micro #5: Game score (solo lectura, KISS) ---
         if (!setActual.getGames().isEmpty()) {
             Game gameActual = setActual.getGames().get(setActual.getGames().size() - 1);
+            System.out.println("Servidor (game actual): " + gameActual.getServidor().getNombre());
 
             if (gameActual.hayGanador()) {
                 Participante ganador = gameActual.getGanador();

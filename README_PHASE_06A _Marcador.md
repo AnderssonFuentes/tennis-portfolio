@@ -169,7 +169,7 @@ Se extendió `MarcadorClasico` para mostrar el **score del set actual** contado 
 El marcador sigue siendo **solo lectura**: consulta a `Partido → Set → Game` y presenta información sin modificar el dominio.
 
 ---
-✅ Micro-avance #5 — Game score del game actual (solo lectura)
+## ✅ Micro-avance #5 — Game score del game actual (solo lectura)
 
 - Se extendió `MarcadorClasico` para mostrar el puntaje del game actual en el set actual:
 
@@ -184,3 +184,12 @@ El marcador sigue siendo **solo lectura**: consulta a `Partido → Set → Game`
 El marcador se mantiene como solo lectura: no modifica reglas ni estado del dominio.
 
 ---
+## ✅ Micro-avance #6 — Servidor del game actual (solo lectura)
+
+Se añadió el concepto de **servidor** al `Game para poder mostrar en el marcador quién está sacando en el game actual.
+
+- `Game` ahora recibe servidor en su constructor y expone `getServidor()`.
+
+- `MarcadorClasico` muestra `Servidor (game actual)` consultando el último game del set actual.
+
+- El marcador se mantiene como **solo lectura**: no modifica reglas ni estado del dominio.

@@ -87,11 +87,11 @@ public class MainSetDemo {
 
         // Simulamos que cada jugador gana 6 games → 6-6
         for (int i = 0; i < 6; i++) {
-            Game g1 = new Game(rafa, roger, reglasGame);
+            Game g1 = new Game(rafa, roger, roger, reglasGame);
             while (!g1.hayGanador()) g1.registrarPunto(rafa);
             set.agregarGame(g1);
 
-            Game g2 = new Game(rafa, roger, reglasGame);
+            Game g2 = new Game(rafa, roger, roger, reglasGame);
             while (!g2.hayGanador()) g2.registrarPunto(roger);
             set.agregarGame(g2);
         }
