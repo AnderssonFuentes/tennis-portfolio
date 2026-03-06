@@ -12,7 +12,7 @@ public class MainGameDemo {
         Jugador j2 = new Jugador("Rafael Nadal");
 
         IReglasGame reglas = new ReglasClasicasGame();
-        Game game = new Game(j1, j2, reglas);
+        Game game = new Game(j1, j2, j1, reglas);
 
         // Secuencia para forzar Deuce -> Ventaja -> Ganador
         game.registrarPunto(j1); // 15-0
