@@ -35,6 +35,7 @@ public class Set {
 }*/
 package com.tenis.dominio;
 
+import com.tenis.reglas.IReglasGame;
 import com.tenis.reglas.IReglasSet;
 import com.tenis.reglas.IReglasTieBreak;
 
@@ -73,6 +74,71 @@ public class Set {
             terminado = true;
         }
         // no auto-iniciamos tie-break: se ofrece método explícito iniciarTieBreak()
+    }
+
+    // 06A #7 — Rotación de saque por game
+    /**
+     * Se Crea el primer Game del set.
+     * Aquí se define el servidor inicial explícitamente.
+     */
+    public Game crearPrimerGame(IReglasGame reglasGame, Participante servidorInicial) {
+        if (!games.isEmpty()) {
+            throw new IllegalStateException("Ya existe al menos un game. Usa crearSiguienteGame().");
+        }
+        validarParticipantesParaGame();
+        validarServidorInicial(servidorInicial);
+
+        Game g = new Game(participante1, participante2, servidorInicial, reglasGame);
+        agregarGame(g);
+        return g;
+    }
+    /**
+     * Se crea el siguiente Game del set aplicando rotación de servidor
+     * respecto al último Game agregado.
+     */
+    public Game crearSiguienteGame(IReglasGame reglasGame) {
+        if (games.isEmpty()) {
+            throw new IllegalStateException("No hay games aún. Usa crearPrimerGame() para iniciar.");
+        }
+        validarParticipantesParaGame();
+
+        Participante servidor = calcularServidorSiguienteGame();
+        Game g = new Game(participante1, participante2, servidor, reglasGame);
+        agregarGame(g);
+        return g;
+    }
+    /**
+     * Regla del dominio: el servidor alterna respecto al game anterior.
+     */
+    private Participante calcularServidorSiguienteGame() {
+        Game ultimo = games.get(games.size() - 1);
+        Participante servidorAnterior = ultimo.getServidor();
+
+        // Alternancia simple (KISS)
+        if (servidorAnterior.equals(participante1)) return participante2;
+        if (servidorAnterior.equals(participante2)) return participante1;
+
+        // Esto no debería pasar si el modelo está consistente,
+        // pero se deja blindado.
+        throw new IllegalStateException("Servidor anterior no coincide con los participantes del set.");
+    }
+    /**
+     * Asegura que este Set conozca quiénes son sus participantes.
+     * (En tu Set ya existen participante1 y participante2, y en tie-break los usas).
+     */
+    private void validarParticipantesParaGame() {
+        if (participante1 == null || participante2 == null) {
+            throw new IllegalStateException("Set no tiene participantes. Usa el constructor Set(reglas, p1, p2).");
+        }
+    }
+
+    private void validarServidorInicial(Participante servidorInicial) {
+        if (servidorInicial == null) {
+            throw new IllegalArgumentException("Servidor inicial requerido");
+        }
+        if (!servidorInicial.equals(participante1) && !servidorInicial.equals(participante2)) {
+            throw new IllegalArgumentException("Servidor inicial debe ser uno de los participantes del set");
+        }
     }
 
     public boolean hayGanador() {

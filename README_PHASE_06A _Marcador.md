@@ -193,3 +193,157 @@ Se añadió el concepto de **servidor** al `Game para poder mostrar en el marcad
 - `MarcadorClasico` muestra `Servidor (game actual)` consultando el último game del set actual.
 
 - El marcador se mantiene como **solo lectura**: no modifica reglas ni estado del dominio.
+
+---
+
+## ✅ Micro-avance #7 (06A #7) — Rotación de saque por game
+
+### 🎯 Objetivo
+Implementar una regla real del tenis:
+
+> **Cuando se crea un nuevo Game dentro de un Set, el servidor alterna respecto al Game anterior.**
+
+Esto significa que el Set no solo contiene games, sino que **orquesta** su creación aplicando reglas del dominio.
+
+---
+
+## 🧠 Regla del dominio (Tenis real)
+
+- El saque **no cambia punto a punto**.
+- El saque cambia **game a game**.
+- Esta regla depende del **orden de los games** dentro del set.
+
+✅ Por eso esta regla pertenece a `Set`, no a `Game`, no al marcador.
+
+---
+
+## 🧩 Diseño OO (responsabilidades)
+
+### `Game`
+Responsable de:
+- representar un game individual
+- conocer su servidor (`getServidor()`)
+
+### `Set`
+Responsable de:
+- administrar la secuencia de games
+- aplicar la regla: **alternar servidor en cada nuevo game**
+- crear games de forma controlada (para garantizar la regla)
+
+---
+
+## 🔧 Implementación (cambio mínimo y KISS)
+
+### Problema inicial
+En la versión anterior, los `Game` se creaban por fuera y luego se agregaban con `set.agregarGame(game)`.
+
+Eso hace difícil garantizar la regla de alternancia, porque `Set` no controla la creación.
+
+### Solución aplicada
+Se añadieron métodos “fábrica” en `Set` para crear los games desde el set:
+
+- `crearPrimerGame(IReglasGame reglasGame, Participante servidorInicial)`
+  - Crea el primer game con servidor explícito.
+  - Evita iniciar si ya hay games.
+
+- `crearSiguienteGame(IReglasGame reglasGame)`
+  - Crea el siguiente game alternando automáticamente el servidor.
+
+- `calcularServidorSiguienteGame()`
+  - Regla KISS de alternancia:
+    - si el servidor anterior fue `participante1` → ahora sirve `participante2`
+    - si fue `participante2` → ahora sirve `participante1`
+
+### Validaciones añadidas (mínimas)
+- Validar que el set tenga participantes conocidos (`participante1` y `participante2`)
+- Validar que el servidor inicial sea uno de los participantes
+
+---
+
+## 🔄 Comunicación entre objetos (modelo)
+
+Cuando se pide crear un game:
+
+1. `Set` revisa si existen games previos.
+2. Si es el primer game:
+  - usa el servidor inicial explícito.
+3. Si no es el primero:
+  - toma el servidor del último game (`ultimo.getServidor()`).
+  - calcula el opuesto.
+4. `Set` crea el nuevo `Game(...)`.
+5. `Set` lo agrega usando `agregarGame(g)`.
+
+✅ La vista/console solo imprime lo que ya está resuelto en el modelo.
+
+---
+
+## 🧪 Demo de verificación
+
+Se creó el demo:
+
+- `MainRotacionSaqueDemo`
+
+### Escenario
+- `p1 = Nadal`
+- `p2 = Federer`
+- `primer servidor = Nadal`
+
+Se crean 4 games consecutivos desde el set:
+
+- Game 1: Nadal
+- Game 2: Federer
+- Game 3: Nadal
+- Game 4: Federer
+
+### Output esperado
+
+Game 1 servidor: Nadal
+Game 2 servidor: Federer
+Game 3 servidor: Nadal
+Game 4 servidor: Federer
+
+
+> Nota KISS: en el demo se imprime el nombre con cast a `Jugador`:
+> `((Jugador) g.getServidor()).getNombre()`
+> Esto se mantiene simple para singles. Más adelante se mejorará para soportar `Equipo` de forma polimórfica.
+
+---
+
+## ✅ Resultado del micro #7
+Con este micro avance:
+
+- El `Set` se convierte en el **orquestador** real de la secuencia de games.
+- La regla del dominio (alternancia del saque) queda en el lugar correcto.
+- El marcador puede mostrar el servidor sin introducir lógica.
+
+---
+
+## 📌 Archivos involucrados
+
+### Modificados
+- `src/main/java/com/tenis/dominio/Set.java`
+  - se agregaron métodos para crear games y alternar servidor
+
+### Nuevos
+- `src/main/java/com/tenis/app/MainRotacionSaqueDemo.java`
+  - demo para validar rotación de saque
+
+---
+
+## ✅ Checklist final (micro #7)
+
+- [x] `Game` conoce su servidor (micro #6)
+- [x] `Set` crea games y alterna servidor automáticamente
+- [x] demo de consola valida alternancia real del tenis
+
+---
+
+## 🧭 Próximo paso (cuando toque, sin prisa)
+
+Una vez cerrado este micro, el siguiente paso natural sería:
+
+- Mostrar automáticamente en el marcador quién sirve en el game actual.
+
+Pero eso se hará **sin meter lógica al marcador**: el marcador solo consulta al modelo.
+
+---
