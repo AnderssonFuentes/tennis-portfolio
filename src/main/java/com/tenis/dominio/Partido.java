@@ -91,4 +91,19 @@ public class Partido {
 
     public Participante getParticipante1() { return participante1; }
     public Participante getParticipante2() { return participante2; }
+
+    public Set getSetActual() {
+        if (sets.isEmpty()) {
+            return null;
+        }
+        return sets.get(sets.size() - 1);
+    }
+
+    public Game getGameActual() {
+        Set setActual = getSetActual();
+        if (setActual == null) {
+            return null;
+        }
+        return setActual.getGameActual();
+    }
 }

@@ -210,6 +210,13 @@ public class Set {
         return false;
     }
 
+    public Game getGameActual() {
+        if (games.isEmpty()) {
+            return null;
+        }
+        return games.get(games.size() - 1);
+    }
+
     public TieBreak getTieBreak() {
         return tieBreak;
     }
