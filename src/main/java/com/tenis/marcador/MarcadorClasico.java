@@ -2,8 +2,6 @@ package com.tenis.marcador;
 
 import com.tenis.dominio.*;
 
-import java.util.List;
-
 public class MarcadorClasico implements IMarcador {
 
     @Override
@@ -37,16 +35,14 @@ public class MarcadorClasico implements IMarcador {
             System.out.println("Ganador del partido: " + (g != null ? g.getNombre() : "N/A"));
         }
 
-        // ===== Micro-avance #3: Set actual + TieBreak (solo lectura) =====
-        List<Set> sets = partido.getSets();
-
         System.out.println("\n[Set actual]");
-        if (sets.isEmpty()) {
+
+        Set setActual = partido.getSetActual();
+        if (setActual == null) {
             System.out.println("Aún no hay sets agregados al partido.");
             return;
         }
 
-        Set setActual = sets.get(sets.size() - 1);
         System.out.println("Games jugados en este set: " + setActual.getGames().size());
 
         int gamesP1 = 0;
@@ -69,10 +65,10 @@ public class MarcadorClasico implements IMarcador {
                 + " - "
                 + gamesP2 + " " + p2.getNombre());
 
-        // --- Micro #5: Game score (solo lectura, KISS) ---
-        if (!setActual.getGames().isEmpty()) {
-            Game gameActual = setActual.getGames().get(setActual.getGames().size() - 1);
-            System.out.println("Servidor (game actual): " + gameActual.getServidor().getNombre());
+        Game gameActual = partido.getGameActual();
+
+        if (gameActual != null) {
+            System.out.println("Sirve: " + gameActual.getServidor().getNombre());
 
             if (gameActual.hayGanador()) {
                 Participante ganador = gameActual.getGanador();
@@ -81,7 +77,7 @@ public class MarcadorClasico implements IMarcador {
                 String p1Score = gameActual.puntajePara(p1);
                 String p2Score = gameActual.puntajePara(p2);
 
-                System.out.println("Game actual: " + p1Score + " - " + p2Score);
+                System.out.println("Puntaje: " + p1Score + " - " + p2Score);
             }
         } else {
             System.out.println("Game actual: Aún no hay games en el set actual.");
