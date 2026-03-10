@@ -90,3 +90,29 @@ Este proyecto está bajo la **Licencia MIT**, lo que permite su uso, modificaci�
 > 💬 *“Un buen diseño de software no se escribe, se modela primero.  
 > Cada clase cuenta una historia dentro del dominio.”* — Inspirado en *Grady Booch*
 EOF
+
+---
+
+# Micro-avance 06A #8 — Servidor del `Game` actual visible en el marcador
+
+## Objetivo
+
+Hacer visible en el `MarcadorClasico` quién es el servidor del `Game` actual, sin introducir lógica de negocio dentro del marcador.
+
+La intención de este micro-avance fue mantener una separación clara de responsabilidades:
+
+- El **modelo** conoce el estado actual del partido.
+- El **`Game`** conoce quién es su servidor.
+- El **marcador** únicamente consulta el modelo y muestra la información.
+
+De esta forma, el marcador continúa siendo una vista de **solo lectura**, alineada con los principios de diseño orientado a objetos y con un enfoque KISS.
+
+---
+
+## Qué se quería lograr
+
+Mostrar en consola una salida como la siguiente:
+
+```text
+Sirve: Roger Federer
+Puntaje: 15 - 30
