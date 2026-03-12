@@ -497,3 +497,118 @@ A partir de este punto, un siguiente micro-avance coherente podría ser:
 
 - mostrar también quién recibe en el game actual,
 - o seguir enriqueciendo el marcador con más información de solo lectura, sin mover reglas del dominio hacia la vista.
+
+---
+
+## 06A #9 — Receptor del game actual visible en el marcador
+
+### Objetivo
+Extender el marcador clásico para mostrar no solo quién sirve en el game actual, sino también quién recibe.
+
+### Contexto
+En el micro-avance anterior se hizo visible el servidor actual en el marcador.  
+El siguiente paso natural fue completar esa vista mostrando también el receptor del game actual.
+
+Antes, la salida podía mostrar algo como:
+
+```text
+Sirve: Roger Federer
+Puntaje: 15 - 30
+```
+
+Después de este micro-avance, el marcador también muestra:
+
+```text
+Sirve: Roger Federer
+Recibe: Rafael Nadal
+Puntaje: 15 - 30
+```
+
+### Problema que se quería resolver
+El marcador informaba quién servía y el puntaje, pero todavía no mostraba quién estaba recibiendo en el game actual.
+
+Aunque parece un cambio pequeño, hace que el estado del game sea más claro y más completo para quien lee la salida.
+
+### Decisión de diseño
+Se decidió que `Game` fuera el responsable de responder quién recibe.
+
+Esto se hizo así porque `Game` ya conoce:
+- los participantes del game
+- el servidor actual
+
+Por tanto, determinar el receptor pertenece al estado del game y no a la vista.
+
+La idea central fue mantener esta regla simple:
+
+> El modelo responde; el marcador solo muestra.
+
+### Implementación
+Se agregó en `Game` el método `getReceptor()`.
+
+```java
+public Participante getReceptor() {
+    for (Participante participante : puntos.keySet()) {
+        if (!participante.equals(servidor)) {
+            return participante;
+        }
+    }
+    throw new IllegalStateException("No se pudo determinar el receptor");
+}
+```
+
+Luego, en `MarcadorClasico`, se añadió la impresión de la nueva línea:
+
+```java
+System.out.println("Recibe: " + gameActual.getReceptor().getNombre());
+```
+
+### Comunicación entre objetos
+El flujo quedó así:
+
+```text
+MarcadorClasico -> Partido.getGameActual()
+MarcadorClasico -> Game.getServidor()
+MarcadorClasico -> Game.getReceptor()
+MarcadorClasico -> mostrar por consola
+```
+
+O dicho de forma simple:
+
+- `MarcadorClasico` pide el `gameActual` al `Partido`
+- luego consulta a `Game` quién sirve y quién recibe
+- finalmente imprime esa información
+
+### Impacto en el diseño
+Este cambio:
+- mejora la claridad del marcador
+- mantiene la lógica del dominio dentro de `Game`
+- evita que la vista calcule información que no le corresponde
+- conserva el proyecto simple y alineado con KISS
+
+### Archivos modificados
+- `src/main/java/com/tenis/dominio/Game.java`
+- `src/main/java/com/tenis/marcador/MarcadorClasico.java`
+
+### Resultado
+Ahora el marcador puede mostrar salidas como:
+
+#### Game en curso
+```text
+Sirve: Roger Federer
+Recibe: Rafael Nadal
+Puntaje: 15 - 30
+```
+
+#### Game terminado
+```text
+Sirve: Roger Federer
+Recibe: Rafael Nadal
+Game actual: TERMINADO (ganó Rafael Nadal)
+```
+
+### Aprendizaje de este micro-avance
+Aunque el cambio fue pequeño, reforzó una idea importante de análisis y diseño orientado a objetos:
+
+- `Game` conoce el estado del juego
+- `MarcadorClasico` solo presenta información
+-  cada clase mantiene una responsabilidad simple y clara
