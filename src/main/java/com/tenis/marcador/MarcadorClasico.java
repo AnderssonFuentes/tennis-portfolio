@@ -69,6 +69,7 @@ public class MarcadorClasico implements IMarcador {
 
         if (gameActual != null) {
             System.out.println("Sirve: " + gameActual.getServidor().getNombre());
+            System.out.println("Recibe: " + gameActual.getReceptor().getNombre());
 
             if (gameActual.hayGanador()) {
                 Participante ganador = gameActual.getGanador();

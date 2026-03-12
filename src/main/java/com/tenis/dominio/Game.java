@@ -54,7 +54,18 @@ public class Game {
         return puntos.keySet();
     }
 
-    public Participante getServidor() { return servidor; }
+    public Participante getServidor() {
+        return servidor;
+    }
+
+    public Participante getReceptor() {
+        for (Participante participante : puntos.keySet()) {
+            if (!participante.equals(servidor)) {
+                return participante;
+            }
+        }
+        throw new IllegalStateException("No se pudo determinar el receptor");
+    }
 
     public boolean hayGanador() { return reglas.hayGanador(this); }
 
