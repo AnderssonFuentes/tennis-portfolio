@@ -66,23 +66,7 @@ public class MarcadorClasico implements IMarcador {
                 + gamesP2 + " " + p2.getNombre());
 
         Game gameActual = partido.getGameActual();
-
-        if (gameActual != null) {
-            System.out.println("Sirve: " + gameActual.getServidor().getNombre());
-            System.out.println("Recibe: " + gameActual.getReceptor().getNombre());
-
-            if (gameActual.hayGanador()) {
-                Participante ganador = gameActual.getGanador();
-                System.out.println("Game actual: TERMINADO (ganó " + ganador.getNombre() + ")");
-            } else {
-                String p1Score = gameActual.puntajePara(p1);
-                String p2Score = gameActual.puntajePara(p2);
-
-                System.out.println("Puntaje: " + p1Score + " - " + p2Score);
-            }
-        } else {
-            System.out.println("Game actual: Aún no hay games en el set actual.");
-        }
+        mostrarBloqueGameActual(gameActual);
 
         TieBreak tb = setActual.getTieBreak();
 
@@ -93,6 +77,31 @@ public class MarcadorClasico implements IMarcador {
             System.out.println("TieBreak: " + p1.getNombre() + " " + tbP1 + " - " + tbP2 + " " + p2.getNombre());
         } else {
             System.out.println("TieBreak activo: NO");
+        }
+    }
+
+    private void mostrarBloqueGameActual(Game gameActual) {
+        System.out.println("\n[Game actual]");
+
+        if (gameActual == null) {
+            System.out.println("Aún no hay games en el set actual.");
+            return;
+        }
+
+        Participante servidor = gameActual.getServidor();
+        Participante receptor = gameActual.getReceptor();
+
+        System.out.println("Sirve: " + servidor.getNombre());
+        System.out.println("Recibe: " + receptor.getNombre());
+
+        if (gameActual.hayGanador()) {
+            Participante ganador = gameActual.getGanador();
+            System.out.println("Estado: TERMINADO");
+            System.out.println("Ganador: " + (ganador != null ? ganador.getNombre() : "N/A"));
+        } else {
+            String scoreServidor = gameActual.puntajePara(servidor);
+            String scoreReceptor = gameActual.puntajePara(receptor);
+            System.out.println("Puntaje: " + scoreServidor + " - " + scoreReceptor);
         }
     }
 }
