@@ -612,3 +612,126 @@ Aunque el cambio fue pequeño, reforzó una idea importante de análisis y dise�
 - `Game` conoce el estado del juego
 - `MarcadorClasico` solo presenta información
 -  cada clase mantiene una responsabilidad simple y clara
+
+---
+
+# Micro-avance 06A #10 — Bloque visual más claro del *game actual*
+
+## Contexto
+
+Dentro de la fase `06A - marcador`, este micro-avance continúa la línea de mejoras incrementales sobre la visualización del estado del partido en consola.
+
+En los micro-avances anteriores se hizo visible información puntual del `Game` actual:
+
+- **06A #8** — servidor visible
+- **06A #9** — receptor visible
+
+El siguiente paso natural fue mejorar la forma en que esa información se presenta, agrupándola en un bloque más claro, ordenado y fácil de leer durante la ejecución de la demo.
+
+---
+
+## Objetivo
+
+Reorganizar la salida por consola del `Game` actual para que deje de mostrarse como datos sueltos y pase a visualizarse como un bloque textual más claro, manteniendo intacta la lógica del dominio.
+
+La intención fue mejorar la legibilidad del marcador sin introducir nuevas reglas, nuevas estructuras del dominio ni complejidad innecesaria.
+
+---
+
+## Motivación
+
+Hasta este punto, el proyecto ya permitía obtener información relevante del `Game` actual, como:
+
+- quién sirve
+- quién recibe
+- si el game tiene ganador
+- quién ganó
+- cómo va el puntaje
+
+Sin embargo, esa información todavía no estaba presentada de la manera más clara posible para una demo o para una lectura rápida por consola.
+
+Este micro-avance busca resolver eso con un cambio pequeño pero útil:
+
+- mejora la claridad visual
+- mejora la coherencia del marcador
+- facilita la lectura del estado actual del juego
+- no altera el diseño del dominio
+- mantiene el proyecto alineado con **KISS**, **YAGNI**, **bajo acoplamiento** y **alta cohesión**
+
+---
+
+## Alcance del micro-avance
+
+### Incluye
+
+- reorganización visual del bloque del `Game` actual en consola
+- agrupación de la información relevante del game en una sección reconocible
+- impresión diferenciada entre:
+    - **game en curso**
+    - **game terminado**
+- encapsulación local de esta impresión en un método privado dentro de `MarcadorClasico`
+
+### No incluye
+
+- cambios en las reglas del tenis
+- cambios en la lógica de puntuación
+- cambios en la lógica de sets
+- cambios en la lógica de tie-break
+- nuevos objetos del dominio
+- nuevos patrones de diseño
+- refactorizaciones amplias del proyecto
+
+---
+
+## Decisión de diseño
+
+Se decidió que este cambio debía resolverse en `MarcadorClasico`, y no en `Game` ni en `Partido`.
+
+### Razón
+
+La clase `Game` ya exponía toda la información necesaria mediante operaciones existentes, por ejemplo:
+
+- `getServidor()`
+- `getReceptor()`
+- `hayGanador()`
+- `getGanador()`
+- `puntajePara(Participante p)`
+
+La clase `Partido` ya ofrecía acceso al game en curso mediante:
+
+- `getGameActual()`
+
+Por lo tanto, no era necesario tocar el dominio.  
+La mejora debía concentrarse exclusivamente en la forma de presentar la información en consola.
+
+Esta decisión mantiene una separación sana de responsabilidades:
+
+- `Partido` coordina
+- `Game` conoce su estado
+- `MarcadorClasico` organiza la salida textual
+
+---
+
+## Implementación realizada
+
+Se modificó la clase:
+
+- `src/main/java/com/tenis/marcador/MarcadorClasico.java`
+
+### Cambio principal
+
+Dentro de `mostrarEstado(Partido partido)`, la obtención del `Game` actual quedó delegada a un método privado específico:
+
+- `mostrarBloqueGameActual(Game gameActual)`
+
+Este método encapsula toda la impresión del bloque del game actual.
+
+### Comportamiento del nuevo bloque
+
+#### Si no existe un game actual
+
+Se muestra:
+
+```text
+[Game actual]
+Aún no hay games en el set actual.
