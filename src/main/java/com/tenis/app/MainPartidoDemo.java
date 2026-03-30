@@ -94,5 +94,40 @@ public class MainPartidoDemo {
             System.out.println("Bloqueo correcto: " + e.getMessage());
         }
 
+        System.out.println("\n--- Demo tie-break activo ---");
+
+        Partido partidoTieBreak = new Partido(rafa, roger);
+        IMarcador marcadorTieBreak = new MarcadorClasico();
+        partidoTieBreak.setMarcador(marcadorTieBreak);
+
+        Set setTieBreak = new Set(reglasSet, rafa, roger);
+
+// llevamos el set a 6-6
+        for (int i = 0; i < 6; i++) {
+            Game gameRafa = new Game(rafa, roger, roger, reglasGame);
+            while (!gameRafa.hayGanador()) gameRafa.registrarPunto(rafa);
+            setTieBreak.agregarGame(gameRafa);
+
+            Game gameRoger = new Game(rafa, roger, rafa, reglasGame);
+            while (!gameRoger.hayGanador()) gameRoger.registrarPunto(roger);
+            setTieBreak.agregarGame(gameRoger);
+        }
+
+        System.out.println("¿Set en 6-6?: " + setTieBreak.necesitaTieBreak());
+
+        if (setTieBreak.necesitaTieBreak()) {
+            setTieBreak.iniciarTieBreak(reglasTieBreak);
+
+            // tie-break en curso: Rafa 3 - 2 Roger
+            setTieBreak.registrarPuntoTieBreak(rafa);
+            setTieBreak.registrarPuntoTieBreak(roger);
+            setTieBreak.registrarPuntoTieBreak(rafa);
+            setTieBreak.registrarPuntoTieBreak(roger);
+            setTieBreak.registrarPuntoTieBreak(rafa);
+        }
+
+        partidoTieBreak.agregarSet(setTieBreak);
+        marcadorTieBreak.mostrarEstado(partidoTieBreak);
+
     }
 }
