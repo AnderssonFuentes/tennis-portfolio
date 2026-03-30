@@ -69,19 +69,11 @@ public class MarcadorClasico implements IMarcador {
         mostrarBloqueGameActual(gameActual);
 
         TieBreak tb = setActual.getTieBreak();
-
-        if (tb != null) {
-            System.out.println("TieBreak activo: SI");
-            int tbP1 = tb.puntosDe(p1);
-            int tbP2 = tb.puntosDe(p2);
-            System.out.println("TieBreak: " + p1.getNombre() + " " + tbP1 + " - " + tbP2 + " " + p2.getNombre());
-        } else {
-            System.out.println("TieBreak activo: NO");
-        }
+        mostrarBloqueTieBreakActual(tb, p1, p2);
     }
 
     private void mostrarBloqueGameActual(Game gameActual) {
-        System.out.println("\n[Game actual]");
+        System.out.println("[Game actual]");
 
         if (gameActual == null) {
             System.out.println("Aún no hay games en el set actual.");
@@ -103,5 +95,20 @@ public class MarcadorClasico implements IMarcador {
             String scoreReceptor = gameActual.puntajePara(receptor);
             System.out.println("Puntaje: " + scoreServidor + " - " + scoreReceptor);
         }
+    }
+
+    private void mostrarBloqueTieBreakActual(TieBreak tb, Participante p1, Participante p2) {
+        System.out.println("[TieBreak actual]");
+
+        if (tb == null) {
+            System.out.println("Estado: INACTIVO");
+            return;
+        }
+
+        int tbP1 = tb.puntosDe(p1);
+        int tbP2 = tb.puntosDe(p2);
+
+        System.out.println("Estado: ACTIVO");
+        System.out.println("Puntaje: " + p1.getNombre() + " " + tbP1 + " - " + tbP2 + " " + p2.getNombre());
     }
 }

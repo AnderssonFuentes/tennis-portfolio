@@ -735,3 +735,124 @@ Se muestra:
 ```text
 [Game actual]
 Aún no hay games en el set actual.
+```
+
+---
+# Micro-avance 06A #11 — Bloque visual más claro del *tie-break actual*
+
+## Contexto
+
+Dentro de la fase `06A - marcador`, este micro-avance continúa la estrategia de mejoras incrementales sobre la visualización del estado del partido en consola.
+
+En los micro-avances recientes se trabajó la claridad del marcador desde una perspectiva progresiva:
+
+- **06A #8** — servidor visible
+- **06A #9** — receptor visible
+- **06A #10** — bloque visual más claro del *game actual*
+
+El siguiente paso natural fue extender esa misma idea al estado del *tie-break*, para que su visualización quedara alineada con el resto del marcador y dejara de mostrarse como líneas sueltas.
+
+---
+
+## Objetivo
+
+Reorganizar la salida por consola del *tie-break actual* para mostrarlo como un bloque textual más claro, consistente y fácil de leer, manteniendo intacta la lógica del dominio.
+
+La intención fue mejorar la legibilidad del marcador sin agregar nuevas reglas, nuevas estructuras ni complejidad innecesaria.
+
+---
+
+## Motivación
+
+Hasta este punto, el marcador ya podía informar si existía un tie-break y mostrar su puntaje. Sin embargo, esa información todavía aparecía con una presentación más dispersa que el resto de la salida.
+
+Después del micro **06A #10**, el `Game actual` ya contaba con un bloque propio. Por coherencia visual, el `TieBreak actual` debía alcanzar el mismo nivel de claridad.
+
+Este micro-avance busca precisamente eso:
+
+- mejorar la legibilidad del marcador
+- hacer más consistente la estructura de salida
+- facilitar la interpretación del estado actual del set
+- fortalecer la demo del proyecto
+- preservar el enfoque de simplicidad y cambios localizados
+
+---
+
+## Alcance del micro-avance
+
+### Incluye
+
+- reorganización visual del *tie-break actual* en consola
+- creación de un bloque textual reconocible para el tie-break
+- diferenciación explícita entre:
+    - **tie-break inactivo**
+    - **tie-break activo**
+- encapsulación local de esta impresión en un método privado dentro de `MarcadorClasico`
+- validación del caso inactivo y del caso activo mediante una demo controlada
+
+### No incluye
+
+- cambios en la lógica de activación del tie-break
+- cambios en la lógica de puntuación del tie-break
+- cambios en las reglas del tenis
+- cambios en `Set`, `Partido` o `TieBreak`
+- nuevos objetos del dominio
+- patrones de diseño
+- refactorizaciones amplias del proyecto
+
+---
+
+## Decisión de diseño
+
+Se decidió que este cambio debía resolverse exclusivamente en `MarcadorClasico`, y no en las clases del dominio.
+
+### Razón
+
+La clase `Set` ya ofrecía acceso al tie-break actual mediante:
+
+- `getTieBreak()`
+
+La clase `TieBreak` ya exponía la información necesaria para mostrar su puntaje mediante:
+
+- `puntosDe(Participante p)`
+
+Por lo tanto, no era necesario modificar el modelo del dominio. La mejora debía concentrarse únicamente en la forma de presentar la información por consola.
+
+Esto mantiene una separación sana de responsabilidades:
+
+- `Partido` coordina
+- `Set` expone el tie-break actual
+- `TieBreak` conoce su estado y su puntaje
+- `MarcadorClasico` organiza y presenta la salida textual
+
+---
+
+## Implementación realizada
+
+Se modificó la clase:
+
+- `src/main/java/com/tenis/marcador/MarcadorClasico.java`
+
+Y se añadió una pequeña validación controlada en:
+
+- `src/main/java/com/tenis/app/MainPartidoDemo.java`
+
+### Cambio principal en `MarcadorClasico`
+
+Dentro de `mostrarEstado(Partido partido)`, la impresión del tie-break dejó de hacerse inline y pasó a delegarse a un método privado específico:
+
+- `mostrarBloqueTieBreakActual(TieBreak tb, Participante p1, Participante p2)`
+
+De esta forma, `mostrarEstado(...)` conserva una estructura más limpia y consistente con el micro anterior, donde ya existía un método privado para el bloque del `Game actual`.
+
+---
+
+## Comportamiento del nuevo bloque
+
+### Si no existe tie-break
+
+Se muestra:
+
+```text
+[TieBreak actual]
+Estado: INACTIVO
